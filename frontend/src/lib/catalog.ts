@@ -60,6 +60,9 @@ export async function getSlugs() {
   return get<{ product: string[]; category: string[]; bird: string[]; blog: string[] }>("/slugs");
 }
 
+/** ساخت پروژه با Cache Components دست‌کم یک پارامتر می‌خواهد، حتی وقتی دیتابیس هنوز خالی است */
+export const staticSlugParams = (slugs: string[]) => (slugs.length ? slugs : ["__placeholder__"]).map((slug) => ({ slug }));
+
 export async function getTagged(tag: "bestseller" | "new", limit = 10) {
   return (await getProducts({ tag, inStock: true, perPage: limit })).items;
 }

@@ -50,6 +50,10 @@ cd backend
 .venv/bin/python manage.py test tests
 ```
 
+## انتشار
+
+مراحل انتشار روی Railway و Vercel در [DEPLOY.md](DEPLOY.md) است.
+
 ## پیش از انتشار
 
 | مورد | کار لازم |
@@ -60,5 +64,4 @@ cd backend
 | سفارش‌های پرداخت‌نشده | `python manage.py release_unpaid` را با cron هر ۵ دقیقه اجرا کنید تا موجودی آزاد شود |
 | چند پردازه | برای throttle، در `CACHE_URL` یک کش مشترک مانند Redis تنظیم کنید |
 | تنظیمات دامنه | `FRONTEND_URL`، `ALLOWED_HOSTS` و `DEBUG=false` در بک‌اند؛ `API_URL` و `NEXT_PUBLIC_SITE_URL` در فرانت‌اند |
-| فایل‌ها | روی سرور، `/media` و فایل‌های استاتیک ادمین را با Nginx یا فضای ذخیره‌سازی سرو کنید و جنگو را با Gunicorn اجرا کنید |
 | محتوا | اطلاعات تماس در `frontend/src/lib/site.ts` و متن قوانین و حریم خصوصی |

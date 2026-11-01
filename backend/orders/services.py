@@ -2,6 +2,7 @@ import secrets
 from dataclasses import dataclass
 
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 from django.db import IntegrityError, transaction
 from django.db.models import F
 from django.utils import timezone
@@ -189,10 +190,10 @@ def place_order(**kwargs):
 
 
 def start_payment(order, callback_url):
-    gateway = get_gateway()
     try:
+        gateway = get_gateway()
         result = gateway.start(order, order.total, callback_url)
-    except GatewayError as error:
+    except (GatewayError, ImproperlyConfigured) as error:
         cancel_order(order.pk)
         raise OrderError("اتصال به درگاه پرداخت انجام نشد. دوباره تلاش کنید.", "gateway") from error
     Payment.objects.create(order=order, gateway=gateway.name, amount=order.total, authority=result.authority)

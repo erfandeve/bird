@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { Catalog, type RawParams } from "@/components/shop/Catalog";
-import { getCategories, getSlugs } from "@/lib/catalog";
+import { getCategories, getSlugs, staticSlugParams } from "@/lib/catalog";
 
 type Props = { params: Promise<{ slug: string }>; searchParams: Promise<RawParams> };
 
 export async function generateStaticParams() {
-  return (await getSlugs()).category.map((slug) => ({ slug }));
+  return staticSlugParams((await getSlugs()).category);
 }
 
 // محتوای کامل برای سئو مهم‌تر از ناوبری آنی با اسکلت خالی است

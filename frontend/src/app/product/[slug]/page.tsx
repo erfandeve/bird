@@ -8,14 +8,14 @@ import { BuyBox } from "@/components/product/BuyBox";
 import { Gallery } from "@/components/product/Gallery";
 import { ProductSlider } from "@/components/product/ProductSlider";
 import { ReviewForm } from "@/components/product/ReviewForm";
-import { getCategories, getProduct, getRelated, getReviews, getSlugs } from "@/lib/catalog";
+import { getCategories, getProduct, getRelated, getReviews, getSlugs, staticSlugParams } from "@/lib/catalog";
 import { faDate, faNum } from "@/lib/format";
 import { site } from "@/lib/site";
 
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
-  return (await getSlugs()).product.map((slug) => ({ slug }));
+  return staticSlugParams((await getSlugs()).product);
 }
 
 // محتوای کامل برای سئو مهم‌تر از ناوبری آنی با اسکلت خالی است

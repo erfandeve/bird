@@ -140,6 +140,15 @@ class OrderTests(TestCase):
         self.assertEqual(self.variant.stock, 5)
         self.assertEqual(Coupon.objects.get().used_count, 0)
 
+    @override_settings(PAYMENT_GATEWAY="zarinpal", ZARINPAL_MERCHANT_ID="")
+    def test_missing_gateway_config_releases_the_order(self):
+        response = self.client.post("/api/v1/orders", order_payload(self.variant), format="json")
+        self.assertEqual(response.status_code, 409)
+        self.assertEqual(response.data["code"], "gateway")
+        self.assertEqual(Order.objects.get().status, "cancelled")
+        self.variant.refresh_from_db()
+        self.assertEqual(self.variant.stock, 5)
+
     def test_unknown_authority_goes_to_failed_page(self):
         self.assertIn("/checkout/failed", self.client.get("/api/v1/payments/callback?Authority=nope&Status=OK")["Location"])
 

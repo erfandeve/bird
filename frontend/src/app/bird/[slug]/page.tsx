@@ -3,12 +3,12 @@ import { notFound } from "next/navigation";
 import { PerchedBird } from "@/components/birds/PerchedBird";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { Catalog, type RawParams } from "@/components/shop/Catalog";
-import { getBirds, getSlugs } from "@/lib/catalog";
+import { getBirds, getSlugs, staticSlugParams } from "@/lib/catalog";
 
 type Props = { params: Promise<{ slug: string }>; searchParams: Promise<RawParams> };
 
 export async function generateStaticParams() {
-  return (await getSlugs()).bird.map((slug) => ({ slug }));
+  return staticSlugParams((await getSlugs()).bird);
 }
 
 // محتوای کامل برای سئو مهم‌تر از ناوبری آنی با اسکلت خالی است

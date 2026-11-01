@@ -21,8 +21,14 @@ SHIPPING = [
 class Command(BaseCommand):
     help = "دادهٔ نمونهٔ فروشگاه را وارد می‌کند. نام‌ها، قیمت‌ها و نظرها ساختگی‌اند و برای سایت واقعی نیستند."
 
+    def add_arguments(self, parser):
+        parser.add_argument("--if-empty", action="store_true", help="اگر محصولی وجود دارد کاری نکن")
+
     @transaction.atomic
     def handle(self, *args, **options):
+        if options["if_empty"] and Product.objects.exists():
+            self.stdout.write("Store already has products; skipping demo data.")
+            return
         data = json.loads(DATA.read_text(encoding="utf-8"))
 
         for i, c in enumerate(data["categories"]):

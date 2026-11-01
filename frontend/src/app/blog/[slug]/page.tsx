@@ -3,14 +3,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { JsonLd } from "@/components/layout/JsonLd";
-import { getPost, getPosts } from "@/lib/catalog";
+import { getPost, getPosts, staticSlugParams } from "@/lib/catalog";
 import { faDate, faNum } from "@/lib/format";
 import { site } from "@/lib/site";
 
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
-  return (await getPosts()).map((p) => ({ slug: p.slug }));
+  return staticSlugParams((await getPosts()).map((p) => p.slug));
 }
 
 // محتوای کامل برای سئو مهم‌تر از ناوبری آنی با اسکلت خالی است
