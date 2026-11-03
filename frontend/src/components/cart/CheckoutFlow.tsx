@@ -219,6 +219,7 @@ export function CheckoutFlow() {
               </div>
               <p className="mt-4 text-sm leading-7 text-olive-800">
                 ثبت سفارش به معنی پذیرش <Link href="/terms" className="underline underline-offset-2">قوانین فروشگاه</Link> است.
+                {process.env.NEXT_PUBLIC_DEMO_MODE && " این نسخهٔ نمایشی است؛ پرداختی انجام نمی‌شود و سفارش فقط در همین مرورگر ذخیره می‌شود."}
               </p>
               <div className="mt-6 flex gap-2">
                 <button type="button" className="btn btn-soft" onClick={() => setStep(1)}>بازگشت</button>

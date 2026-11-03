@@ -5,7 +5,7 @@ import { infoPages } from "@/lib/data/content";
  * صفحه‌های پویا پس از شروع استریم نمی‌توانند کد وضعیت را عوض کنند و notFound() با کد ۲۰۰ برمی‌گردد.
  * برای اینکه گوگل soft 404 نبیند، آدرس‌های ناموجود همین‌جا و پیش از رندر ۴۰۴ می‌گیرند.
  */
-const API_URL = process.env.API_URL ?? "http://127.0.0.1:8000";
+const API_URL = process.env.API_URL;
 const FRESH_MS = 60_000;
 const RECHECK_MS = 5_000;
 
@@ -14,6 +14,12 @@ let known: Known | null = null;
 let loadedAt = 0;
 
 async function loadKnown() {
+  if (!API_URL) {
+    const { demoSlugs } = await import("@/lib/demo/catalog");
+    known = Object.fromEntries(Object.entries(demoSlugs()).map(([key, slugs]) => [key, new Set(slugs)]));
+    loadedAt = Date.now();
+    return;
+  }
   try {
     const response = await fetch(`${API_URL}/api/v1/slugs`, { signal: AbortSignal.timeout(2000) });
     if (response.ok) {

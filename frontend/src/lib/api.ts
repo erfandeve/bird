@@ -21,6 +21,10 @@ function firstMessage(value: unknown): string | undefined {
 
 export async function api<T = unknown>(path: string, options: { method?: string; body?: unknown } = {}): Promise<T> {
   const { method = "GET", body } = options;
+  if (process.env.NEXT_PUBLIC_DEMO_MODE) {
+    const { demoApi } = await import("./demo/browser-api");
+    return (await demoApi(path, method, body as Record<string, unknown> | undefined)) as T;
+  }
   const headers: Record<string, string> = { Accept: "application/json" };
   if (body !== undefined) headers["Content-Type"] = "application/json";
   if (method !== "GET") {

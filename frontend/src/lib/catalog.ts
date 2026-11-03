@@ -7,15 +7,22 @@ import type { BirdSpecies, Category, Post, Product, ProductFilter, ProductPage, 
  * جنگو از مسیر /api/revalidate تگ catalog را تازه می‌کند.
  */
 
-const API_URL = process.env.API_URL ?? "http://127.0.0.1:8000";
+const API_URL = process.env.API_URL;
 
 async function get<T>(path: string): Promise<T> {
+  if (!API_URL) {
+    const { demoGet } = await import("./demo/catalog");
+    const result = demoGet(path);
+    if (result === null) throw new Error(`Demo data has no ${path}`);
+    return result as T;
+  }
   const response = await fetch(`${API_URL}/api/v1${path}`, { headers: { Accept: "application/json" } });
   if (!response.ok) throw new Error(`API ${path} responded ${response.status}`);
   return response.json();
 }
 
 async function getOrNull<T>(path: string): Promise<T | null> {
+  if (!API_URL) return ((await import("./demo/catalog")).demoGet(path) as T | null) ?? null;
   const response = await fetch(`${API_URL}/api/v1${path}`, { headers: { Accept: "application/json" } });
   if (response.status === 404) return null;
   if (!response.ok) throw new Error(`API ${path} responded ${response.status}`);
